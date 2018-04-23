@@ -32,14 +32,15 @@ pygame.mixer.init()
 #pygame.mixer.music.play(-1, 0.0)
 #pygame.mixer.music.set_volume(0.25)
 
-if pygame.mixer.music.get_busy() == False:
-    pygame.mixer.music.rewind("finalresources/audio/backgroundmusic.mp3")
+#if pygame.mixer.music.get_busy() == False:
+ #   pygame.mixer.music.rewind("finalresources/audio/backgroundmusic.mp3")
 
 
 # # #loadimages
 
 flower = pygame.image.load("finalresources/images/flower.png")
 background = pygame.image.load("finalresources/images/background.png")
+cannon = pygame.image.load("finalresources/images/cannon.png")
 background = pygame.transform.scale(background, (480, 640))
 flower = pygame.transform.scale(flower, (50,50))
 
@@ -84,12 +85,24 @@ class bobOmb(Sprite):
     def location(self):
         self.x = x
         self.y = y
-        self.xVelo = -self.velocity
+        self.xVelocity = -self.velocity
     def draw(self):
         self.screen.blit(self.image, self.rect)
     
-
-      
+class Cannon_ball():
+    def __init__(self, image, screen, game_settings, pos, speed, distance, rect):
+        self.image = pygame.image.load("finalresources/images/cannon.png")
+        self.screen = screen
+        self.game_settings = game_settings
+        self.pos = pos
+        self.speed = speed
+        self.distance = distance
+        self.rect = self.image.get_rect()
+    def draw(self):
+        self.screen.blit(self.image, self.rect)
+    def location(self):
+        self.x = x
+        self.y = y
 
 def run_game():
     #initialize pygame, settings, and screen object
@@ -109,6 +122,7 @@ def run_game():
 
     #Start the main loop for the run_game
     while True:
+        cloud = cloud('')
         screen.fill(0)
         clock = pygame.time.Clock()
         clock.tick(0.5)
@@ -117,7 +131,11 @@ def run_game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-    
+            if event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
+                #if pos == 
+
+
         screen.blit(background,(0,0))
         screen.blit(flower,(170,565))    
         screen.blit(flower,(92,565)) 
@@ -125,6 +143,10 @@ def run_game():
         screen.blit(flower,(340,565)) 
         pygame.display.update()
 
+        
+
+            
+            
     #starts timer for spawning
         
 
