@@ -17,13 +17,14 @@ element to the game
 '''
 
 from time import sleep
-from random import randint
 import math
-import pygame
 import pygame.locals 
 import time 
 import sys
 from pygame.sprite import Sprite
+import random
+import pygame
+
 
 
 #main music
@@ -41,8 +42,10 @@ pygame.mixer.init()
 flower = pygame.image.load("finalresources/images/flower.png")
 background = pygame.image.load("finalresources/images/background.png")
 cannon = pygame.image.load("finalresources/images/cannon.png")
+cannon = pygame.transform.scale(cannon, (50,50))
 background = pygame.transform.scale(background, (480, 640))
-flower = pygame.transform.scale(flower, (50,50))
+flower = pygame.transform.scale(flower, (45,45))
+bobomb = pygame.image.load("finalresources/images/bob-omb.png")
 
 class Settings():
     def __init__(self):
@@ -65,23 +68,24 @@ class Cloud():
          self.screen.blit(self.image, self.rect)   
 
 class bobOmb(Sprite):
-    def __init__(self,screen,game_settings,pos,speed,velocity):
+    def __init__(self,screen,game_settings,pos,speed,velocity,location):
         self.screen = screen
         self.image = pygame.image.load("finalresources/images/bob-omb.png")
         self.rect = self.image.get_rect(center=pos)
         self.speed = speed
         self.target = None
-        self.position = list(self.rect.center)
+        self.position = self.image.get_rect()
         self.distance = None
         self.vec = None
         self.__dict__[self.vec]
         self.velocity = velocity
     def moveLoop(self):
         while True:
-            count += 1
-            if count == 10:
-                count = 0
-                bobOmb.move(0, 3)
+            for x in range(100):
+                screen.blit(background, self.position, self.position)
+                self.screen.blit(self.image, self.position)
+                pygame.display.update()
+                
     def location(self):
         self.x = x
         self.y = y
@@ -90,50 +94,57 @@ class bobOmb(Sprite):
         self.screen.blit(self.image, self.rect)
     
 class Cannon_ball():
-    def __init__(self, image, screen, game_settings, pos, speed, distance, rect):
-        self.image = pygame.image.load("finalresources/images/cannon.png")
+    def __init__(self, screen, game_settings):
+        self.image = pygame.image.load("..stone_diego/finalresources/images/cannon.png")
         self.screen = screen
         self.game_settings = game_settings
-        self.pos = pos
-        self.speed = speed
-        self.distance = distance
-        self.rect = self.image.get_rect()
+        # self.pos = pos
+        # self.speed = speed
+        # self.distance = distance
+        # self.rect = self.image.get_rect()
+        self.rect = pygame.Rect(32,32,32,32)
     def draw(self):
         self.screen.blit(self.image, self.rect)
     def location(self):
-        self.x = x
-        self.y = y
+        print("something")
+        # self.x = x
+        # self.y = y
 
-def run_game():
+def runGame():
     #initialize pygame, settings, and screen object
     global game_settings
     global screen
     game_settings = Settings()
     screen = pygame.display.set_mode((game_settings.screen_width, game_settings.screen_height))
     #sets run_game to be true
-    #run_game.has_been_called = True
-    pass
+    #run_game.has_been_called = Tru
     #initialize
     pygame.init()
     screen = pygame.display.set_mode((game_settings.screen_width,game_settings.screen_height))
     pygame.display.set_caption("Bob-omb Squad")
     #enemy = bobOmb(game_settings, screen)
-
-
+    
+    handled = False
     #Start the main loop for the run_game
     while True:
-        cloud = cloud('')
+        spawntimer=-1
         screen.fill(0)
-        clock = pygame.time.Clock()
-        clock.tick(0.5)
-
+        ev = pygame.event.get()
         #Watch for keyboard and mouse events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
+        for event in ev:
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
-                #if pos == 
+                if pos == (220,360):
+                    print("clicked!")
+
+        cannon = Cannon_ball(screen, game_settings)
+        cannon.draw
+        if pygame.mouse.get_pressed()[0] and Cannon_ball.rect.collidepoint(pygame.mouse.get_pos()):
+            print("worked")
+
 
 
         screen.blit(background,(0,0))
@@ -141,13 +152,42 @@ def run_game():
         screen.blit(flower,(92,565)) 
         screen.blit(flower,(262,565)) 
         screen.blit(flower,(340,565)) 
+        screen.blit(cannon,(220,360))
+
         pygame.display.update()
+        # spawntimer = 100
+        # spawntimer1 = 0
+        # bombs = [[480, 100]]
 
+        # if spawntimer == 0:
+        #     bombs.append([random.randint(0,480), 640])
+        #     spawntimer=100-(spawntimer1*2)
+        #     if spawntimer1>=35:
+        #         spawntimer1=35
+        #     else:
+        #         spawntimer1+=5
+        # index=0
+        # for bomb in bombs:
+        #     if bomb[0]<-64:
+        #         bombs.pop(index)
+        #     bomb[0]-=7
+             
+        #     bombrect=pygame.Rect(bobomb.get_rect())
         
+        #     bombrect.top=bomb[1]
+        #     bombrect.bottom=bomb[0]
+        #     if bombrect.bottom<64:
+        #         bombs.pop(index)
+              
+           
+
+        #     index+=1
+        # for bomb in bombs:
+        #     screen.blit(bobomb, bomb)
 
             
-            
+    pygame.display.flip()    
     #starts timer for spawning
         
 
-run_game()
+runGame()
