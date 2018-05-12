@@ -87,13 +87,23 @@ class Settings():
         self.screen_height = 640
         self.background = pygame.image.load("finalresources/images/background.png")
 
-class Cloud():
+class Cloud(Sprite):
     def __init__(self,screen,game_settings):
+        super(bombOmb, self).__init__()
         self.screen = screen
-        self.image = pygame.image.load("finalresources/images/cloud.png")
         self.game_settings = game_settings
+        self.image = pygame.image.load("finalresources/images/cloud.png")
         self.rect = self.image.get_rect()
-        self.screen.rect = screen.get_rect()
+        self.rect.x = self.rect.width
+        self.rect.y = self.rect.height
+        self.x = float(self.rect.x)
+        self.bomb_speed_factor = 1
+    def blitme(self):
+        self.screen.blit(self.image, self.rect)
+    def update(self):
+        self.x += self.bomb_speed_factor
+        self.rect.x = self.x
+    #def moveLoop(self):
  
 
 class bobOmb(Sprite):
@@ -112,14 +122,9 @@ class bobOmb(Sprite):
     def update(self):
         self.x += self.bomb_speed_factor
         self.rect.x = self.x
-    def moveLoop(self):
-        timer = 0
-        timer += 1
-        if timer == 100:
-            move = True
-        if move == True:
-            self.x = self.x + 1
-            screen.blit
+    #def moveLoop(self):
+        
+        
 
 
 #defines class for the cannon ball with a super class of Sprite
@@ -184,6 +189,7 @@ def runGame():
     cannon = Cannon_ball(screen, game_settings)
     flower = Flower(game_settings, screen)
     bomb = bobOmb(game_settings, screen)
+    cloud = Cloud(screen, game_settings)
     
 
     while True:
