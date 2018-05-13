@@ -87,23 +87,7 @@ class Settings():
         self.screen_height = 640
         self.background = pygame.image.load("finalresources/images/background.png")
 
-class Cloud(Sprite):
-    def __init__(self,screen,game_settings):
-        super(bombOmb, self).__init__()
-        self.screen = screen
-        self.game_settings = game_settings
-        self.image = pygame.image.load("finalresources/images/cloud.png")
-        self.rect = self.image.get_rect()
-        self.rect.x = self.rect.width
-        self.rect.y = self.rect.height
-        self.x = float(self.rect.x)
-        self.bomb_speed_factor = 1
-    def blitme(self):
-        self.screen.blit(self.image, self.rect)
-    def update(self):
-        self.x += self.bomb_speed_factor
-        self.rect.x = self.x
-    #def moveLoop(self):
+
  
 
 class bobOmb(Sprite):
@@ -113,15 +97,23 @@ class bobOmb(Sprite):
         self.game_settings = game_settings
         self.image = pygame.image.load("finalresources/images/bob-omb.png")
         self.rect = self.image.get_rect()
-        self.rect.x = self.rect.width
+        self.rect.x = random.randint(30,350)
         self.rect.y = self.rect.height
         self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
         self.bomb_speed_factor = 1
+        self.pos = self.rect.y
+        self.rect.right = self.x
     def blitme(self):
         self.screen.blit(self.image, self.rect)
     def update(self):
-        self.x += self.bomb_speed_factor
+        self.y += self.bomb_speed_factor
+        pygame.time.delay(10)
+        screen.blit(background,(0,0))
         self.rect.x = self.x
+        self.rect.y = self.y
+        if self.rect.right > 480:
+            self.kill()
     #def moveLoop(self):
         
         
@@ -189,12 +181,13 @@ def runGame():
     cannon = Cannon_ball(screen, game_settings)
     flower = Flower(game_settings, screen)
     bomb = bobOmb(game_settings, screen)
-    cloud = Cloud(screen, game_settings)
+    #cloud = Cloud(screen, game_settings)
     
 
     while True:
+        bomb.update()
         bomb.blitme()
-       
+
         #Watch for keyboard and mouse events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
