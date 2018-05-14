@@ -29,57 +29,23 @@ from bomb import bobOmb
 from settings import Settings
 from flower import Flower
 
-
-
 #plays music and has it repeat forever
 pygame.mixer.init()
 pygame.mixer.music.load("finalresources/audio/backgroundmusic.mp3")
 pygame.mixer.music.play(-1, 0.0)
 pygame.mixer.music.set_volume(0.25)
-#pygame.mixer
+
 if pygame.mixer.music.get_busy() == False:
     pygame.mixer.music.rewind("finalresources/audio/backgroundmusic.mp3")
 
-
 #loadimages
-
-# flower = pygame.image.load("finalresources/images/flower.png")
 background = pygame.image.load("finalresources/images/background.png")
 cannonimage = pygame.image.load("finalresources/images/cannon.png")
+#changes the dimensions of the images to make them larger
 cannonimage = pygame.transform.scale(cannonimage, (50,50))
 background = pygame.transform.scale(background, (480, 640))
 # flowerimage = pygame.transform.scale(flower, (45,45))
 bobomb = pygame.image.load("finalresources/images/bob-omb.png")
-# class for the width and height of the window and sets the background
-
-        
-        
-    
-
-
-class Cannon_balls(Sprite):
-    def __init__(self, x, y):
-        Sprite.__init__(self)
-        # self.image = pygame.Surface((10, 20))
-        self.image = cannonimage
-        self.image.set_colorkey(BLACK)
-        # self.image.fill(WHITE)
-        self.rect = self.image.get_rect()
-        self.rect.bottom = y
-        self.rect.centerx = x
-        self.speedy = -10
-    def update(self):
-        self.rect.y += self.speedy
-        # eliminate if it moves off the top of the screen
-        if self.rect.bottom < 0:
-            self.kill()
-
-
-
-        
-        
-        
-
 
 #defines class for the cannon ball with a super class of Sprite
 class Cannon_ball(pygame.sprite.Sprite):
@@ -120,28 +86,8 @@ class Cannon_ball(pygame.sprite.Sprite):
         screen.blit(self.image, self.new_pos)
 #         # print(self.pos)
         print("draw cannon is calling")
-        
-
-
-
-
-
-
-
-
-
-
-Pclick = False
-Sclick = False
-timer = 0
-cannon = Cannon_ball(screen, game_settings)
-flower = Flower(game_settings, screen)
-bomb = bobOmb(game_settings, screen)
-cloud = Cloud(game_settings, screen)
-all_sprites = pygame.sprite.Group()
-bombs = pygame.sprite.Group()
-
-
+    
+#function that takes a new entity from the sprite group
 def newBomb(self):
         b = bobOmb(game_settings, screen)
         all_sprites.add(b)   
@@ -152,89 +98,90 @@ def runGame():
     global game_settings
     global screen
     game_settings = Settings()
+    #sets screen to the width and height of the window, so assets can be blited in the window
     screen = pygame.display.set_mode((game_settings.screen_width, game_settings.screen_height))
-    #sets run_game to be true
-    #run_game.has_been_called = Tru
     #initialize
     pygame.init()
+    #sets the window caption to "Bob-omb Squad"
     pygame.display.set_caption("Bob-omb Squad")
-    #enemy = bobOmb(game_settings, screen)
+    # global variables used later on and also defines variable using the classes
+    Pclick = False
+    Sclick = False
+    timer = 0
+    cannon = Cannon_ball(screen, game_settings)
+    flower = Flower(game_settings, screen)
+    bomb = bobOmb(game_settings, screen)
+    cloud = Cloud(game_settings, screen)
+    all_sprites = pygame.sprite.Group()
+    bombs = pygame.sprite.Group()
 
-    print("screen spawned")
-    #Start the main loop for the run_game
-    
-
-
+# creates while true loop to have a continuing loop for the game
     while True:
+        #updates the bomb position and blits it
         bomb.update()
         bomb.blitme()
-        #newBomb()
-        bomb.changeDirection()
         #cloud.update()
         #cloud.blitme()
-
-        #Watch for keyboard and mouse events
+        # if the event is that the user tries to exit the window, it closes the python window
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-
-            # hi this is ben attempting to fix diego's code take 2000000:
+            #Ben McCardy wrote this code (line 156-169)
+            #checks if the user clicks down the left mouse button
             if event.type == pygame.MOUSEBUTTONDOWN:
+                # sets the mouse variable to the coordinate position of the mouse cursor
                 mouse = pygame.mouse.get_pos()
                 mouseX, mouseY = mouse[0], mouse[1]
                 cannon.pos = mouse
+                # checks if the click was made in a certain area of the screen
                 if (220 <= mouseX and 260 >= mouseX) and (360 <= mouseY and 400 >= mouseY):
                     Pclick = True
                     print("pclick set to true")
-                # cannonRelease = False
+            # when the user release the mouse button it resets everything and moves the cannonball back
             if event.type == pygame.MOUSEBUTTONUP:
                 Pclick = False
                 print("pclick set to false")
                 timer = 0
                 cannon.center = (240, 380)
                 screen.blit(background,(0,0))
-           
+           # checks if the spacebar button is clicked down
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     Sclick = True
+            # checks if the space bar button is released
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_SPACE:
                     Sclick = True
             if Sclick == False:
                 pass
+            # if Slick is true, then it calls on the function to fire the cannon
             if Sclick == True:
                 print('should be firing')
                 print(cannon.new_pos)
                 #cannon.fire()
                 screen.blit(background,(0,0))
-
+        # if the mouse button is being clicked
         if Pclick == True:
             timer += 1
+            # after a ceetain amount of time, "mouse" gathers the current mouse position
             if timer >= 100:
                 mouse = pygame.mouse.get_pos()
                 newpos = mouse
-                #print("cannon should be at " + str(mouse))
-
+                # blits the background and then the cannonball over the background at the current mouse position
                 screen.blit(background,(0,0))
                 screen.blit(cannon.image, newpos)
-        
-        
-        #screen.blit(background,(0,0))
+        # blits all the assets at the beginning at specific coordinates
         screen.blit(flower.image,(170,565))    
         screen.blit(flower.image,(92,565)) 
         screen.blit(flower.image,(262,565)) 
         screen.blit(flower.image,(340,565)) 
         screen.blit(cannon.image,(220,360))
         
-        
-
-    
-
+        # updates the pygame window to display the new blits
         pygame.display.update()
        
-            
+    # flips the screen for the user      
     pygame.display.flip()    
-    #starts timer for spawning
-        
-
+    
+# calls on the rungame function with the whule true loop
 runGame()
