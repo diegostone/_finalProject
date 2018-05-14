@@ -24,41 +24,34 @@ import sys
 from pygame.sprite import Sprite
 import random
 import pygame
+from cloud import Cloud
+from bomb import bobOmb
+from settings import Settings
+from flower import Flower
 
-# exit the program
-# def events():
-# 	for event in pygame.event.get():
-# 		if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
-# 			pygame.quit()
-# 			sys.exit()
+
 
 #plays music and has it repeat forever
-# pygame.mixer.init()
-# pygame.mixer.music.load("finalresources/audio/backgroundmusic.mp3")
-# pygame.mixer.music.play(-1, 0.0)
-# pygame.mixer.music.set_volume(0.25)
+pygame.mixer.init()
+pygame.mixer.music.load("finalresources/audio/backgroundmusic.mp3")
+pygame.mixer.music.play(-1, 0.0)
+pygame.mixer.music.set_volume(0.25)
 #pygame.mixer
-# if pygame.mixer.music.get_busy() == False:
-#     pygame.mixer.music.rewind("finalresources/audio/backgroundmusic.mp3")
+if pygame.mixer.music.get_busy() == False:
+    pygame.mixer.music.rewind("finalresources/audio/backgroundmusic.mp3")
 
 
 #loadimages
 
-flower = pygame.image.load("finalresources/images/flower.png")
+# flower = pygame.image.load("finalresources/images/flower.png")
 background = pygame.image.load("finalresources/images/background.png")
 cannonimage = pygame.image.load("finalresources/images/cannon.png")
 cannonimage = pygame.transform.scale(cannonimage, (50,50))
 background = pygame.transform.scale(background, (480, 640))
-flowerimage = pygame.transform.scale(flower, (45,45))
+# flowerimage = pygame.transform.scale(flower, (45,45))
 bobomb = pygame.image.load("finalresources/images/bob-omb.png")
 # class for the width and height of the window and sets the background
-class Flower(Sprite):
-    def __init__(self, game_settings, screen):
-        super(Flower, self).__init__()
-        self.screen = screen
-        self.game_settings = game_settings
-        self.image = pygame.image.load("finalresources/images/flower.png")
-        self.image = pygame.transform.scale(flower, (45,45))
+
         
         
     
@@ -81,40 +74,9 @@ class Cannon_balls(Sprite):
         if self.rect.bottom < 0:
             self.kill()
 
-class Settings():
-    def __init__(self):
-        self.screen_width = 480
-        self.screen_height = 640
-        self.background = pygame.image.load("finalresources/images/background.png")
 
 
- 
-
-class bobOmb(Sprite):
-    def __init__(self, game_settings, screen):
-        super(bobOmb, self).__init__()
-        self.screen = screen
-        self.game_settings = game_settings
-        self.image = pygame.image.load("finalresources/images/bob-omb.png")
-        self.rect = self.image.get_rect()
-        self.rect.x = random.randint(30,350)
-        self.rect.y = self.rect.height
-        self.x = float(self.rect.x)
-        self.y = float(self.rect.y)
-        self.bomb_speed_factor = 1
-        self.pos = self.rect.y
-        self.rect.right = self.x
-    def blitme(self):
-        self.screen.blit(self.image, self.rect)
-    def update(self):
-        self.y += self.bomb_speed_factor
-        pygame.time.delay(10)
-        screen.blit(background,(0,0))
-        self.rect.x = self.x
-        self.rect.y = self.y
-        if self.rect.right > 480:
-            self.kill()
-    #def moveLoop(self):
+        
         
         
 
@@ -160,6 +122,31 @@ class Cannon_ball(pygame.sprite.Sprite):
         print("draw cannon is calling")
         
 
+
+
+
+
+
+
+
+
+
+Pclick = False
+Sclick = False
+timer = 0
+cannon = Cannon_ball(screen, game_settings)
+flower = Flower(game_settings, screen)
+bomb = bobOmb(game_settings, screen)
+cloud = Cloud(game_settings, screen)
+all_sprites = pygame.sprite.Group()
+bombs = pygame.sprite.Group()
+
+
+def newBomb(self):
+        b = bobOmb(game_settings, screen)
+        all_sprites.add(b)   
+        bombs.add(b)
+
 def runGame():
     #initialize pygame, settings, and screen object
     global game_settings
@@ -175,18 +162,16 @@ def runGame():
 
     print("screen spawned")
     #Start the main loop for the run_game
-    Pclick = False
-    Sclick = False
-    timer = 0
-    cannon = Cannon_ball(screen, game_settings)
-    flower = Flower(game_settings, screen)
-    bomb = bobOmb(game_settings, screen)
-    #cloud = Cloud(screen, game_settings)
     
+
 
     while True:
         bomb.update()
         bomb.blitme()
+        #newBomb()
+        bomb.changeDirection()
+        #cloud.update()
+        #cloud.blitme()
 
         #Watch for keyboard and mouse events
         for event in pygame.event.get():
@@ -221,7 +206,6 @@ def runGame():
                 print('should be firing')
                 print(cannon.new_pos)
                 #cannon.fire()
-                
                 screen.blit(background,(0,0))
 
         if Pclick == True:
@@ -233,13 +217,8 @@ def runGame():
 
                 screen.blit(background,(0,0))
                 screen.blit(cannon.image, newpos)
-
-
-                # print("im blitting I swear!")
         
-                
-
-        #screen.blit(background,(0,0))
+        
         #screen.blit(background,(0,0))
         screen.blit(flower.image,(170,565))    
         screen.blit(flower.image,(92,565)) 
