@@ -1,4 +1,4 @@
-# https://pastebin.com/MRBDdeku
+#Used code from Mr. Cozort's shmup and code writeen by Ben McCardy
 
 # ''' I want to use pygame to recreate the  "bob-omb squad" minigame from Super Mario 64 DS. 
 #         deals heavily with x y coordinates to register hits, and a high score point system
@@ -88,6 +88,7 @@ class Cannon_ball(pygame.sprite.Sprite):
         print("draw cannon is calling")
     
 #function that takes a new entity from the sprite group
+# code used from shmup
 def newBomb(self):
         b = bobOmb(game_settings, screen)
         all_sprites.add(b)   
