@@ -177,6 +177,5 @@ def runGame():
     # flips the screen for the user      
     pygame.display.flip()
  
-
 # calls on the rungame function with the whule true loop
 runGame()
