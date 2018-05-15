@@ -1,5 +1,7 @@
 #Used code from Mr. Cozort's shmup and code writeen by Ben McCardy
 
+# https://pastebin.com/MRBDdeku
+
 # ''' I want to use pygame to recreate the  "bob-omb squad" minigame from Super Mario 64 DS. 
 #         deals heavily with x y coordinates to register hits, and a high score point system
 # https://youtu.be/h1FKzGk80Bo?t=842 : this is a video of what the game is 
@@ -34,9 +36,9 @@ pygame.mixer.init()
 pygame.mixer.music.load("finalresources/audio/backgroundmusic.mp3")
 pygame.mixer.music.play(-1, 0.0)
 pygame.mixer.music.set_volume(0.25)
-
-if pygame.mixer.music.get_busy() == False:
-    pygame.mixer.music.rewind("finalresources/audio/backgroundmusic.mp3")
+#loops the music forever / took this code for shmup by Chris Cozort
+pygame.mixer.music.play(loops=-1)
+pygame.mixer.music.set_volume(0.25)
 
 #loadimages
 background = pygame.image.load("finalresources/images/background.png")
@@ -46,7 +48,6 @@ cannonimage = pygame.transform.scale(cannonimage, (50,50))
 background = pygame.transform.scale(background, (480, 640))
 # flowerimage = pygame.transform.scale(flower, (45,45))
 bobomb = pygame.image.load("finalresources/images/bob-omb.png")
-
 #defines class for the cannon ball with a super class of Sprite
 class Cannon_ball(pygame.sprite.Sprite):
     def __init__(self, screen, game_settings):
@@ -88,12 +89,6 @@ class Cannon_ball(pygame.sprite.Sprite):
         print("draw cannon is calling")
     
 #function that takes a new entity from the sprite group
-# code used from shmup
-def newBomb(self):
-        b = bobOmb(game_settings, screen)
-        all_sprites.add(b)   
-        bombs.add(b)
-
 def runGame():
     #initialize pygame, settings, and screen object
     global game_settings
@@ -118,11 +113,8 @@ def runGame():
 
 # creates while true loop to have a continuing loop for the game
     while True:
-        #updates the bomb position and blits it
-        bomb.update()
-        bomb.blitme()
-        #cloud.update()
-        #cloud.blitme()
+        cloud.update()
+        cloud.blitme()
         # if the event is that the user tries to exit the window, it closes the python window
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -171,6 +163,7 @@ def runGame():
                 # blits the background and then the cannonball over the background at the current mouse position
                 screen.blit(background,(0,0))
                 screen.blit(cannon.image, newpos)
+                
         # blits all the assets at the beginning at specific coordinates
         screen.blit(flower.image,(170,565))    
         screen.blit(flower.image,(92,565)) 
@@ -182,7 +175,8 @@ def runGame():
         pygame.display.update()
        
     # flips the screen for the user      
-    pygame.display.flip()    
-    
+    pygame.display.flip()
+ 
+
 # calls on the rungame function with the whule true loop
 runGame()
