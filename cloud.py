@@ -14,6 +14,7 @@ game_settings = Settings()
 background = pygame.image.load("finalresources/images/background.png")
 background = pygame.transform.scale(background, (480, 640))
 screen = pygame.display.set_mode((game_settings.screen_width, game_settings.screen_height))
+cloudimage = pygame.image.load('finalresources/images/cloud.png')
 
 # defines the Cloud class with the super class of Sprite
 class Cloud(Sprite):
@@ -45,3 +46,10 @@ class Cloud(Sprite):
         screen.blit(background,(0,0))
         self.rect.x = self.x
         self.rect.y = self.y
+        print('forward')
+        # once the image reaches a certain point, the speed factor is set to negative so the x coordinate becomes smaller and moves left
+        if self.x == 416.0:
+            self.cloud_speed_factor = -1
+        if self.x == 30.0:
+            self.cloud_speed_factor = 1
+    
